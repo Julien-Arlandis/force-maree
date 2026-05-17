@@ -66,7 +66,7 @@ const ctx = canvas.getContext('2d');
 
 const TERRE = { x: canvas.width / 2, y: canvas.height / 2, rayon: 120 };
 let LUNE = { x: canvas.width * 0.8, y: canvas.height * 0.3, rayon: 15 };
-const VERSION = 'v5';
+const VERSION = 'v7';
 
 // Amplitude de référence de la marée lorsque la Lune est à distance standard
 const AMPLITUDE_MAREE = 15;
@@ -141,13 +141,6 @@ function animate() {
     ctx.font = "14px sans-serif";
     ctx.fillText("O", TERRE.x - 15, TERRE.y - 10);
 
-    // Mettre à jour l'affichage de la distance et de l'amplitude de marée
-    const distanceInfo = document.getElementById('distanceInfo');
-    if (distanceInfo) {
-        distanceInfo.textContent = `Distance Terre-Lune : ${distanceLune.toFixed(0)} px — Intensité marée : ${distanceFactor.toFixed(2)}×`;
-    }
-
-    // Mettre à jour l'affichage de la distance et de l'amplitude de marée
     const distanceInfo = document.getElementById('distanceInfo');
     if (distanceInfo) {
         distanceInfo.textContent = `Distance Terre-Lune : ${distanceLune.toFixed(0)} px — Intensité marée : ${distanceFactor.toFixed(2)}×`;
