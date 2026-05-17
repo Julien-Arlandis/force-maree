@@ -66,7 +66,7 @@ const ctx = canvas.getContext('2d');
 
 const TERRE = { x: canvas.width / 2, y: canvas.height / 2, rayon: 120 };
 let LUNE = { x: canvas.width * 0.8, y: canvas.height * 0.3, rayon: 15 };
-const VERSION = 'v7';
+const VERSION = 'v8';
 
 // Amplitude de référence de la marée lorsque la Lune est à distance standard
 const AMPLITUDE_MAREE = 15;
@@ -107,8 +107,9 @@ function animate() {
         // ψ (psi) est l'angle entre le point de la Terre et la Lune
         let psi = angleTerre - angleLune; 
 
-        // Notre fameuse formule mathématique issue du potentiel : (3cos²ψ - 1)
-        let deformation = amplitudeMareeReelle * (3 * Math.cos(psi) * Math.cos(psi) - 1);
+        // Quadrupole (symétrique) + octupole (asymétrique, bourrelet lunaire > opposition)
+        const octupole = (TERRE.rayon / distanceLune) * (5 * Math.pow(Math.cos(psi), 3) - 3 * Math.cos(psi));
+        let deformation = amplitudeMareeReelle * ((3 * Math.cos(psi) * Math.cos(psi) - 1) + octupole);
         let rayonOcean = TERRE.rayon + deformation;
 
         let x = TERRE.x + Math.cos(angleTerre) * rayonOcean;
