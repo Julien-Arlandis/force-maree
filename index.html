@@ -32,6 +32,20 @@
             max-width: 600px;
             line-height: 1.4;
         }
+        #versionBadge {
+            position: fixed;
+            right: 16px;
+            bottom: 16px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.55);
+            color: #d8eaff;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -44,6 +58,7 @@
         <b>Forme = Rayon + Amplitude × (3cos²ψ - 1)</b><br>
         <span id="distanceInfo">Distance Terre-Lune : calcul en temps réel</span>
     </div>
+    <div id="versionBadge">Version v1</div>
 
 <script>
 const canvas = document.getElementById('simCanvas');
@@ -51,6 +66,7 @@ const ctx = canvas.getContext('2d');
 
 const TERRE = { x: canvas.width / 2, y: canvas.height / 2, rayon: 120 };
 let LUNE = { x: canvas.width * 0.8, y: canvas.height * 0.3, rayon: 15 };
+const VERSION = 'v4';
 
 // Amplitude de référence de la marée lorsque la Lune est à distance standard
 const AMPLITUDE_MAREE = 15;
@@ -129,6 +145,16 @@ function animate() {
     const distanceInfo = document.getElementById('distanceInfo');
     if (distanceInfo) {
         distanceInfo.textContent = `Distance Terre-Lune : ${distanceLune.toFixed(0)} px — Intensité marée : ${distanceFactor.toFixed(2)}×`;
+    }
+
+    // Mettre à jour l'affichage de la distance et de l'amplitude de marée
+    const distanceInfo = document.getElementById('distanceInfo');
+    if (distanceInfo) {
+        distanceInfo.textContent = `Distance Terre-Lune : ${distanceLune.toFixed(0)} px — Intensité marée : ${distanceFactor.toFixed(2)}×`;
+    }
+    const versionBadge = document.getElementById('versionBadge');
+    if (versionBadge) {
+        versionBadge.textContent = `Version ${VERSION}`;
     }
 
     // 4. Dessiner la Lune
