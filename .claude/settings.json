@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pkill -f auto-sync.py 2>/dev/null; python3 /Users/julien/Desktop/maree/auto-sync.py >> /tmp/auto-sync.log 2>&1 &",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
