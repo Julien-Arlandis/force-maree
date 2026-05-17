@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Le Potentiel de Marée Pur</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #050510;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        canvas {
+            border: 1px solid #333;
+            background-color: #020208;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            cursor: crosshair;
+        }
+        #info {
+            margin-top: 15px;
+            font-size: 15px;
+            color: #aaa;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="margin: 5px;">Déformation Pure de l'Océan (Équation Globale)</h2>
+    <canvas id="simCanvas" width="800" height="600"></canvas>
+    <div id="info">
+        Bougez la souris pour déplacer la <b>Lune</b>.<br>
+        L'océan (en bleu) suit l'équation mathématique du potentiel : <br>
+        <b>Forme = Rayon + Amplitude × (3cos²ψ - 1)</b>
+    </div>
+
+<script>
+const canvas = document.getElementById('simCanvas');
+const ctx = canvas.getContext('2d');
+
+const TERRE = { x: canvas.width / 2, y: canvas.height / 2, rayon: 120 };
+let LUNE = { x: canvas.width * 0.8, y: canvas.height * 0.3, rayon: 15 };
+
+// Amplitude de la marée (exagérée graphiquement pour bien voir l'ellipse)
+const AMPLITUDE_MAREE = 35; 
+
+canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    LUNE.x = e.clientX - rect.left;
+    LUNE.y = e.clientY - rect.top;
+});
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 1. Axe Terre-Lune
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+    ctx.lineWidth = 1;
+    ctx.moveTo(TERRE.x, TERRE.y);
+    ctx.lineTo(LUNE.x, LUNE.y);
+    ctx.stroke();
+
+    // Angle de la Lune par rapport à l'horizontale
+    const angleLune = Math.atan2(LUNE.y - TERRE.y, LUNE.x - TERRE.x);
+
+    // 2. TRACÉ DE L'OCÉAN DÉFORMÉ (Ligne mathématique)
+    ctx.beginPath();
+    for (let i = 0; i <= 360; i++) {
+        let angleTerre = (i * Math.PI) / 180; // Angle du point de la Terre qu'on examine
+        
+        // ψ (psi) est l'angle entre le point de la Terre et la Lune
+        let psi = angleTerre - angleLune; 
+
+        // Notre fameuse formule mathématique issue du potentiel : (3cos²ψ - 1)
+        let deformation = AMPLITUDE_MAREE * (3 * Math.cos(psi) * Math.cos(psi) - 1);
+        let rayonOcean = TERRE.rayon + deformation;
+
+        let x = TERRE.x + Math.cos(angleTerre) * rayonOcean;
+        let y = TERRE.y + Math.sin(angleTerre) * rayonOcean;
+
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = "rgba(0, 140, 255, 0.35)";
+    ctx.fill();
+    ctx.strokeStyle = "#00bfff";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // 3. Dessiner le socle solide de la Terre (Cercle parfait de référence)
+    ctx.beginPath();
+    ctx.arc(TERRE.x, TERRE.y, TERRE.rayon, 0, Math.PI * 2);
+    ctx.strokeStyle = "#17b978";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]); // Ligne pointillée pour voir l'écart
+    ctx.stroke();
+    ctx.setLineDash([]); // Reset
+    
+    // Centre O
+    ctx.beginPath();
+    ctx.arc(TERRE.x, TERRE.y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.font = "14px sans-serif";
+    ctx.fillText("O", TERRE.x - 15, TERRE.y - 10);
+
+    // 4. Dessiner la Lune
+    ctx.beginPath();
+    ctx.arc(LUNE.x, LUNE.y, LUNE.rayon, 0, Math.PI * 2);
+    ctx.fillStyle = "#e1b382";
+    ctx.fill();
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+</body>
+</html>
