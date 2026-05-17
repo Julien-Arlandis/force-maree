@@ -56,7 +56,10 @@
         Bougez la souris pour déplacer la <b>Lune</b>.<br>
         L'océan (en bleu) suit l'équation mathématique du potentiel : <br>
         <b>Forme = Rayon + Amplitude × (3cos²ψ - 1)</b><br>
-        <span id="distanceInfo">Distance Terre-Lune : calcul en temps réel</span>
+        <span id="distanceInfo">Distance Terre-Lune : calcul en temps réel</span><br><br>
+        <label style="cursor:pointer;">
+            <input type="checkbox" id="autoOrbit"> Orbite automatique
+        </label>
     </div>
     <div id="versionBadge">Version v1</div>
 
@@ -66,7 +69,7 @@ const ctx = canvas.getContext('2d');
 
 const TERRE = { x: canvas.width / 2, y: canvas.height / 2, rayon: 120 };
 let LUNE = { x: canvas.width * 0.8, y: canvas.height * 0.3, rayon: 15 };
-const VERSION = 'v8';
+const VERSION = 'v9';
 
 // Amplitude de référence de la marée lorsque la Lune est à distance standard
 const AMPLITUDE_MAREE = 15;
