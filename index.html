@@ -69,19 +69,27 @@ const ctx = canvas.getContext('2d');
 
 const TERRE = { x: canvas.width / 2, y: canvas.height / 2, rayon: 120 };
 let LUNE = { x: canvas.width * 0.8, y: canvas.height * 0.3, rayon: 15 };
-const VERSION = 'v9';
+const VERSION = 'v10';
 
 // Amplitude de référence de la marée lorsque la Lune est à distance standard
 const AMPLITUDE_MAREE = 15;
 const DISTANCE_REF = 300;
 
+let orbitAngle = 0;
+
 canvas.addEventListener('mousemove', (e) => {
+    if (document.getElementById('autoOrbit').checked) return;
     const rect = canvas.getBoundingClientRect();
     LUNE.x = e.clientX - rect.left;
     LUNE.y = e.clientY - rect.top;
 });
 
 function animate() {
+    if (document.getElementById('autoOrbit').checked) {
+        orbitAngle += 0.012;
+        LUNE.x = TERRE.x + Math.cos(orbitAngle) * DISTANCE_REF;
+        LUNE.y = TERRE.y + Math.sin(orbitAngle) * DISTANCE_REF;
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // 1. Axe Terre-Lune
